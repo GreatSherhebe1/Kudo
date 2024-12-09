@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kudo.Pages.Analytics"
+             Title="Analytics"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons">
+    <VerticalStackLayout>
+        <Label 
+            Text="Welcome to Analytics"
+            FontSize="Large"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" 
+            />
+        <buttons:SfSwitch x:Name="sfSwitch" StateChanged="SfSwitch_StateChanged"/>
+    </VerticalStackLayout>
+</ContentPage>
