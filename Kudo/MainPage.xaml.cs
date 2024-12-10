@@ -1,24 +1,72 @@
 ﻿namespace Kudo
+
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
-        public MainPage()
+        private readonly LocalDBService _dbService;
+        private int _editCustomerId;
+        public MainPage(LocalDBService dbService)
         {
             InitializeComponent();
+            _dbService = dbService;
+            Task.Run(async () => listView.ItemsSource = await _dbService.GetCustomers());
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void saveButton_Clicked(object sender, EventArgs e)
         {
-            count++;
+            if (_editCustomerId == 0)
+            {
+                await _dbService.Create(new Customer
+                {
+                    CustomerName = nameEntryField.Text,
+                    Email = emailEntryField.Text,
+                    Mobile = mobileEntryField.Text,
+                });
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+            }
             else
-                CounterBtn.Text = $"Clicked {count} times";
+            {
+                await _dbService.Update(new Customer
+                {
+                    CustomerName = nameEntryField.Text,
+                    Email = emailEntryField.Text,
+                    Mobile = mobileEntryField.Text,
+                });
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+                _editCustomerId = 0;
+            }
+
+            nameEntryField.Text = string.Empty;
+            emailEntryField.Text = string.Empty;
+            mobileEntryField.Text = string.Empty;
+
+            listView.ItemsSource = await _dbService.GetCustomers();
+        }
+
+        private async void listView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var customer = (Customer)e.Item;
+            var action = await DisplayActionSheet("Action", "Cancel", null, "Edit", "Delete");
+
+            switch (action)
+            {
+                case "Edit":
+
+                    _editCustomerId = customer.Id;
+                    nameEntryField.Text = customer.CustomerName;
+                    emailEntryField.Text = customer.Email;
+                    mobileEntryField.Text = customer.Mobile;
+
+                    break;
+
+                case "Delete":
+
+                    await _dbService.Delete(customer);
+                    listView.ItemsSource = await _dbService.GetCustomers();
+
+                    break;
+                  
+            }       
         }
     }
 
