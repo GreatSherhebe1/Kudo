@@ -14,7 +14,7 @@ public interface IStorageRepository
         CancellationToken cancellationToken);
 
     Task RemoveCategoryAsync(
-        int categoryId, 
+        Guid categoryId, 
         CancellationToken cancellationToken);
 
     Task<List<Category>> GetCategoriesByUser(
@@ -28,13 +28,13 @@ public interface IStorageRepository
         CancellationToken cancellationToken);
 
     Task UpdateUserAsync(
-        int id,
+        Guid id,
         string? login,
         string? password,
         CancellationToken cancellationToken);
 
     Task<User> GetUserById(
-        int userId,
+        Guid userId,
         CancellationToken cancellationToken);
 
     Task<User> GetUserByLogin(

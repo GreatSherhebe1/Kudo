@@ -57,7 +57,6 @@ public class StorageRepository : IStorageRepository
             Name = name,
             TransactionType = transactionType,
             UserId = user.Id,
-            User = user
         };
 
         await _context.Categories.AddAsync(category, cancellationToken);
@@ -65,7 +64,7 @@ public class StorageRepository : IStorageRepository
     }
 
     public async Task RemoveCategoryAsync(
-        int categoryId, 
+        Guid categoryId, 
         CancellationToken cancellationToken)
     {
         var category = await _context.Categories
@@ -122,7 +121,7 @@ public class StorageRepository : IStorageRepository
     }
 
     public Task UpdateUserAsync(
-        int id, 
+        Guid id, 
         string? login, 
         string? password, 
         CancellationToken cancellationToken)
@@ -131,7 +130,7 @@ public class StorageRepository : IStorageRepository
     }
 
     public async Task<User> GetUserById(
-        int userId, 
+        Guid userId, 
         CancellationToken cancellationToken)
     {
         return await _context.Users
@@ -159,9 +158,8 @@ public class StorageRepository : IStorageRepository
 
         var financialTransaction = new FinancialTransaction
         {
-            User = user,
+            CategoryId = category.Id,
             UserId = user.Id,
-            Category = category,
             Amount = amount,
             CreatedAt = DateTime.Now
         };
@@ -342,7 +340,7 @@ public class StorageRepository : IStorageRepository
         await CreateFinancialTransactionAsync(
             "petr",
             FinancialTransactionType.Income,
-            incomeCategoriesByPetr[1],
+            incomeCategoriesByPetr[0],
             70000.00m,
             cancellationToken);
     }
