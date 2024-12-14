@@ -120,13 +120,43 @@ public class StorageRepository : IStorageRepository
         await _context.SaveAllChangesAsync(cancellationToken);
     }
 
-    public Task UpdateUserAsync(
+    public async Task UpdateUserAsync(
         Guid id, 
         string? login, 
         string? password, 
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var user = await GetUserById(id, cancellationToken);
+
+        if (user is null)
+        {
+            return;
+        }
+
+        if (login is not null)
+        {
+            if (!SecurityHelper.IsLoginValid(login))
+            {
+                throw new Exception("Логин не удовлетворяет требованиям безопасности. Должен содержать латинские буквы или цифры; длина не менее 4 символов");
+            }
+
+            user.Login = login;
+        }
+
+        if (password is not null)
+        {
+            if (!SecurityHelper.IsPasswordValid(password))
+            {
+                throw new Exception("Пароль не удовлетворяет требованиям безопасности: должны присутствовать буквы или цифры без пробелов; длина не менее 5 символов.");
+            }
+
+            var now = DateTime.Now;
+            var hash = SecurityHelper.GeneratePasswordHash(user.Login, password, now);
+
+            user.PasswordHash = hash;
+        }
+
+        await _context.SaveAllChangesAsync(cancellationToken);
     }
 
     public async Task<User> GetUserById(
