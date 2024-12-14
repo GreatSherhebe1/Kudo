@@ -10,5 +10,27 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
         />
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+    
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+    
+            <Button  x:Name="new" 
+                     Clicked="nextPage" 
+                     Grid.Row="1" 
+                     Grid.Column="1" 
+                     ImageSource="button_add" 
+                     BackgroundColor="#43AA72" 
+                     VerticalOptions="End" 
+                     HorizontalOptions="End" 
+                     CornerRadius="1000"/> 
+        </Grid>
+        
     </VerticalStackLayout>
 </ContentPage>
